@@ -3,7 +3,6 @@
 
 import os
 import json
-import pprint
 from primehub import PrimeHub, PrimeHubConfig
 
 class Deployment(object):
@@ -42,8 +41,8 @@ class Deployment(object):
             print("Creating deployment: {}".format(deployment['id']))
             isNewCreated = True
 
-        pp = pprint.PrettyPrinter(indent=2)
-        pp.pprint(deployment)
+        # pp = pprint.PrettyPrinter(indent=2)
+        # pp.pprint(deployment)
 
         if isNewCreated:
             create_deployment_config = {

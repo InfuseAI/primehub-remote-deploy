@@ -98,10 +98,15 @@ def detail_deployment(id):
     pass
 
 @deploy.command(name='sync-to-remote', help='Sync the deployment to remote cluster')
-@click.argument('id')
-def sync_to_remote(id):
+@click.argument('id', required=False)
+def sync_to_remote(id=None):
     deploy = Deployment(primehub_config)
-    deploy.sync_to_remote(id)
+    if id != None:
+        deploy.sync_to_remote(id)
+    else:
+        deployments = deploy.list()
+        for d in deployments:
+            deploy.sync_to_remote(d['id'])
     pass
 
 if __name__ == "__main__":
