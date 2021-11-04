@@ -57,7 +57,7 @@ class Deployment(object):
                 'endpointAccessType' : deployment['endpointAccessType'],
                 'updateMessage': deployment['updateMessage'],
             }
-            ph_worker.deployments.create(deployment_config)
+            ph_worker.deployments.create(create_deployment_config)
         else:
             update_deployment_config = {
                 'description': deployment['description'] or "",
