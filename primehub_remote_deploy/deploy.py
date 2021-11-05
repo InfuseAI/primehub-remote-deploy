@@ -70,6 +70,10 @@ class Deployment(object):
                 'updateMessage': deployment['updateMessage']
             }
             ph_worker.deployments.update(deployment['id'], update_deployment_config)
+        if deployment['status'] == 'Stopped':
+            ph_worker.deployments.stop(deployment['id'])
+        elif deployment['status'] == 'Deployed':
+            ph_worker.deployments.start(deployment['id'])
         print('[Done]')
 
     def sync_to_remote(self, id):
