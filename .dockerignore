@@ -1,1 +1,5 @@
 dev
+.vscode/
+.git/
+.idea/
+primehub_remote_deploy.egg-info

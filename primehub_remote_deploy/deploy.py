@@ -41,39 +41,32 @@ class Deployment(object):
             print("Creating deployment: {}".format(deployment['id']))
             isNewCreated = True
 
-        # pp = pprint.PrettyPrinter(indent=2)
-        # pp.pprint(deployment)
+        # Prepare the deployment configuration
+        deployment_config = {
+            'description': deployment['description'] or "",
+            'instanceType': deployment['instanceType']['name'],
+            'modelImage': deployment['modelImage'],
+            'modelURI': deployment['modelURI'],
+            'replicas': deployment['replicas'],
+            'imagePullSecret': deployment['imagePullSecret'] or "",
+            'endpointAccessType': deployment['endpointAccessType'],
+            'updateMessage': deployment['updateMessage'],
+            'env': deployment['env'],
+            'metadata': deployment['metadata']
+        }
 
         if isNewCreated:
-            create_deployment_config = {
-                'id': deployment['id'],
-                'name': deployment['name'],
-                'description': deployment['description'] or "",
-                'instanceType': deployment['instanceType']['name'],
-                'modelImage': deployment['modelImage'],
-                'modelURI': deployment['modelURI'],
-                'replicas': deployment['replicas'],
-                'imagePullSecret': deployment['imagePullSecret'] or "",
-                'endpointAccessType' : deployment['endpointAccessType'],
-                'updateMessage': deployment['updateMessage'],
-            }
-            ph_worker.deployments.create(create_deployment_config)
+            deployment_config['id'] = deployment['id']
+            deployment_config['name'] = deployment['name']
+            ph_worker.deployments.create(deployment_config)
         else:
-            update_deployment_config = {
-                'description': deployment['description'] or "",
-                'instanceType': deployment['instanceType']['name'],
-                'modelImage': deployment['modelImage'],
-                'modelURI': deployment['modelURI'],
-                'replicas': deployment['replicas'],
-                'imagePullSecret': deployment['imagePullSecret'] or "",
-                'endpointAccessType' : deployment['endpointAccessType'],
-                'updateMessage': deployment['updateMessage']
-            }
-            ph_worker.deployments.update(deployment['id'], update_deployment_config)
+            ph_worker.deployments.update(deployment['id'], deployment_config)
+
         if deployment['status'] == 'Stopped':
             ph_worker.deployments.stop(deployment['id'])
         elif deployment['status'] == 'Deployed':
             ph_worker.deployments.start(deployment['id'])
+
         print('[Done]')
 
     def sync_to_remote(self, id):

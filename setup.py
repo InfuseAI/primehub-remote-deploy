@@ -7,6 +7,7 @@ setup(
     install_requires=[
         'Click',
         'primehub-python-sdk',
+        'prettytable'
     ],
     packages=find_packages(),
     entry_points={

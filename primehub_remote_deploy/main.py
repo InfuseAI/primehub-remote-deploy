@@ -95,6 +95,34 @@ def list_deployments():
 def detail_deployment(id):
     deploy = Deployment(primehub_config)
     deployment = deploy.get(id)
+    deploy_table = pt.PrettyTable()
+    deploy_table.title = 'Deployment: %s' % deployment['name']
+    deploy_table.header = False
+    deploy_table.add_row(['ID', deployment['id']])
+    deploy_table.add_row(['Endpoint', deployment['endpoint']])
+    deploy_table.add_row(['Access Type', deployment['endpointAccessType']])
+    deploy_table.add_row(['Model Image', deployment['modelImage']])
+    deploy_table.add_row(['Model URI', deployment['modelURI']])
+    deploy_table.add_row(['Status', deployment['status']])
+    deploy_table.add_row(['Replicas', deployment['replicas']])
+    deploy_table.align = "l"
+    print(deploy_table)
+
+    if len(deployment['metadata']) > 0:
+        metadata_table = pt.PrettyTable()
+        metadata_table.title = 'Metadata'
+        metadata_table.field_names = ['Key', 'Value']
+        for k, v in deployment['metadata'].items():
+            metadata_table.add_row([k, v])
+        print(metadata_table)
+
+    if len(deployment['env']) > 0:
+        env_table = pt.PrettyTable()
+        env_table.title = 'Environment Variables'
+        env_table.field_names = ['Name', 'Value']
+        for env in deployment['env']:
+            env_table.add_row([env['name'], env['value']])
+        print(env_table)
     pass
 
 @deploy.command(name='sync-to-remote', help='Sync the deployment to remote cluster')
